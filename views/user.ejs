@@ -1,0 +1,210 @@
+<%- include('./layout/header') %> 
+<%- include('./layout/nav') %> 
+          <div class="col-sm-6">
+            <h1>Kelola Pengguna</h1>
+          </div>
+          <div class="col-sm-6">
+            <div id="bt" class="float-sm-right">
+              <div class="dt-buttons btn-group flex-wrap">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
+                  <i class="fas fa-plus"></i>
+                  Tambah Pengguna
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-info alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              Info: kata sandi untuk pengguna baru dan reset kata sandi adalah "password"
+            </div>
+            <% if(typeof errors != 'undefined') { %>
+            <% errors.forEach(error => { %> 
+            <div class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <%= error.msg %> 
+            </div>
+            <% }) %> 
+            <% } %> 
+            <% if(locals.resetSuccess){ %> 
+              <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <%= resetSuccess %> 
+              </div>
+            <% } %> 
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Tabel Kelola Pengguna</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="user" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% usr.forEach((element, index)=> { %>
+                    <tr>
+                      <td><%= index+1%></td>
+                      <td><%= element.email %></td>
+                      <td><%= element.role %></td>
+                      <td>
+                        <% if(element.role != 'superadmin') { %>
+                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit<%= element.id %>">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete<%= element.id %>">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#resetpassword<%= element.id %>">
+                          <i class="fas fa-undo"></i>
+                        </button>
+                        <% } %> 
+                      </td>
+                    </tr>
+
+                    <!-- Edit Modal -->
+                    <div class="modal fade" id="edit<%= element.id %>">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Edit Pengguna</h4>
+                            <button type="button" class="close" onclick="$('#edit<%= element.id %>').modal('hide');">&times;</button>
+                          </div>
+                          <!-- Modal body -->
+                          <form action="/users/<%= element.id %>?_method=put" method="post">
+                            <div class="modal-body">
+                              <input type="hidden" name="oldEmail" required value="<%= element.oldEmail || element.email %>"/>
+                              <input type="hidden" name="id" required value="<%= element.id %>"/>
+                              <input type="hidden" name="password" required value="<%= element.password %>"/>
+                              <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" class="form-control" placeholder="Email" required value="<%= element.email %>" />
+                              </div>
+                              <div class="form-group">
+                                <label for="role">Pilih Role</label>
+                                <select class="form-control select2bs4" id="role<%= element.id %>" name="role" required>
+                                  <option value="user">User</option>
+                                  <option value="superadmin">Super Admin</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Simpan</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#edit<%= element.id %>').modal('hide');">Tutup</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Delete Modal-->
+                    <div class="modal fade" id="delete<%= element.id %>">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header-->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Hapus Pengguna</h4>
+                            <button type="button" class="close" onclick="$('#delete<%= element.id %>').modal('hide');">&times;</button>
+                          </div>
+                          <!-- Modal body-->
+                          <form action="/users/delete/<%= element.id %>" method="post">
+                            <div class="modal-body">
+                              Apakah Anda yakin ingin menghapus pengguna <%= element.email %>?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Ya</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#delete<%= element.id %>').modal('hide');">Batal</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Reset Password Modal-->
+                    <div class="modal fade" id="resetpassword<%= element.id %>">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header-->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Reset Kata Sandi</h4>
+                            <button type="button" class="close" onclick="$('#resetpassword<%= element.id %>').modal('hide');">&times;</button>
+                          </div>
+                          <!-- Modal body-->
+                          <form action="/users/resetpassword/<%= element.id %>" method="post">
+                            <div class="modal-body">
+                              Apakah Anda yakin ingin mereset kata sandi pengguna <%= element.email %>?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Ya</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#resetpassword<%= element.id %>').modal('hide');">Batal</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="add">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Tambah Pengguna</h4>
+            <button type="button" class="close" onclick="$('#add').modal('hide');">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <form action="/users" method="post">
+            <div class="modal-body">
+              <input type="hidden" name="password" required value="password"/>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="Email" required />
+              </div>
+              <div class="form-group">
+                <label for="role">Pilih Role</label>
+                <select class="form-control select2bs4" id="role" name="role" required>
+                  <option value="user">User</option>
+                  <option value="superadmin">Super Admin</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Simpan</button>
+              <button type="button" class="btn btn-secondary" onclick="$('#add').modal('hide');">Tutup</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+<%- include('./layout/footer') %> 

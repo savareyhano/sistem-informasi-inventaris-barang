@@ -1,0 +1,90 @@
+<%- include('./layout/header') %> 
+<%- include('./layout/nav') %> 
+          <div class="col-sm-6">
+            <h1>Log Aplikasi</h1>
+          </div>
+          <div class="col-sm-6">
+            <div id="bt" class="float-sm-right">
+              <div class="dt-buttons btn-group flex-wrap">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#clearLog">
+                  <i class="fas fa-broom"></i>
+                  Bersihkan Log
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Tabel Log Aplikasi</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="log" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Tanggal & Waktu</th>
+                      <th>Pengguna</th>
+                      <th>Method</th>
+                      <th>Endpoint</th>
+                      <th>Status Code</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% log.forEach((element, index)=> { %>
+                    <tr>
+                      <td><%= index+1%></td>
+                      <td><%= moment(element.date).locale('id').format('DD-MM-YYYY HH:mm:ss') %></td>
+                      <td><%= element.usr %></td>
+                      <td><%= element.method %></td>
+                      <td><%= element.endpoint %></td>
+                      <td><%= element.status_code %></td>
+                    </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- Clear Log Modal-->
+    <div class="modal fade" id="clearLog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header-->
+          <div class="modal-header">
+            <h4 class="modal-title">Bersihkan Log</h4>
+            <button type="button" class="close" onclick="$('#clearLog').modal('hide');">&times;</button>
+          </div>
+          <!-- Modal body-->
+          <form action="/log/delete/" method="post">
+            <div class="modal-body">
+              Apakah Anda yakin ingin menghapus semua data log yang tersimpan ?
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Ya</button>
+              <button type="button" class="btn btn-secondary" onclick="$('#clearLog').modal('hide');">Batal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+<%- include('./layout/footer') %> 

@@ -1,0 +1,129 @@
+<%- include('./layout/header') %> 
+<%- include('./layout/nav') %> 
+          <div class="col-sm-6">
+            <h1>Edit Akun</h1>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <% if(typeof errors != 'undefined') { %>
+        <% errors.forEach(error => { %> 
+        <div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <%= error.msg %> 
+        </div>
+        <% }) %> 
+        <% } %> 
+        <% if(typeof locals.user != 'undefined' && locals.user != 'superadmin@gmail.com') { %>
+        <!-- Ganti Email -->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title">Ganti Email</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form action="/account/changeemail?_method=put" method="post">
+            <div class="card-body">
+              <input type="hidden" name="oldEmail" required value="<%= usr.oldEmail || usr.email %>"/>
+              <input type="hidden" name="matchPass" required value="<%= usr.matchPass || usr.password %>"/>
+              <input type="hidden" name="id" required value="<%= usr.id %>"/>
+              <div class="form-group">
+                <label for="oldEmail">Email Sekarang : </label>
+                <%= usr.oldEmail || usr.email %>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Baru</label>
+                <input type="email" name="email" class="form-control" placeholder="Email Baru" required />
+              </div>
+              <div class="form-group">
+                <label for="password">Kata Sandi</label>
+                <input type="password" name="password" class="form-control" placeholder="Kata Sandi" required />
+              </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+        <% } %> 
+        
+        <!-- Ganti Kata Sandi -->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title">Ganti Kata Sandi</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form action="/account/changepassword?_method=put" method="post">
+            <div class="card-body">
+              <input type="hidden" name="matchPass" required value="<%= usr.matchPass || usr.password %>"/>
+              <input type="hidden" name="id" required value="<%= usr.id %>"/>
+              <div class="form-group">
+                <label for="oldPassword">Kata Sandi Lama</label>
+                <input type="password" name="oldPassword" class="form-control" placeholder="Kata Sandi Lama" required />
+              </div>
+              <div class="form-group">
+                <label for="password">Kata Sandi Baru</label>
+                <input type="password" name="password" class="form-control" placeholder="Kata Sandi Baru" required />
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Konfirmasi Kata Sandi Baru</label>
+                <input type="password" name="confirmPassword" class="form-control" placeholder="Konfirmasi Kata Sandi Baru" required />
+              </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+
+        <% if(typeof locals.user != 'undefined' && locals.user != 'superadmin@gmail.com') { %>
+        <!-- Ganti Role -->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title">Ganti Role</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form action="/account/changerole?_method=put" method="post">
+            <div class="card-body">
+              <input type="hidden" name="oldRole" required value="<%= usr.oldRole || usr.role %>"/>
+              <input type="hidden" name="role" required value="user"/>
+              <input type="hidden" name="matchPass" required value="<%= usr.matchPass || usr.password %>"/>
+              <input type="hidden" name="id" required value="<%= usr.id %>"/>
+              <div class="form-group">
+                <label for="oldEmail">Role Sekarang : </label>
+                <%= usr.oldRole || usr.role %>
+              </div>
+              <div class="form-group">
+                <label for="oldEmail">Ganti Role Ke : </label>
+                user
+              </div>
+              <div class="form-group">
+                <label for="password">Kata Sandi</label>
+                <input type="password" name="password" class="form-control" placeholder="Kata Sandi" required />
+              </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+        <% } %> 
+
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+<%- include('./layout/footer') %> 

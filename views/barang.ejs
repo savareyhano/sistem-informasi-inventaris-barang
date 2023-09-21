@@ -1,0 +1,236 @@
+<%- include('./layout/header') %> 
+<%- include('./layout/nav') %> 
+          <div class="col-sm-6">
+            <h1>Stok Barang</h1>
+          </div>
+          <div class="col-sm-6">
+            <div id="bt" class="float-sm-right">
+              <div class="dt-buttons btn-group flex-wrap">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
+                  <i class="fas fa-plus"></i>
+                  Tambah Barang
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <% if(typeof errors != 'undefined') { %>
+            <% errors.forEach(error => { %> 
+            <div class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <%= error.msg %> 
+            </div>
+            <% }) %> 
+            <% } %> 
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Tabel Stok Barang</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="stokbarang" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Kode Barang</th>
+                      <th>Gambar</th>
+                      <th>Nama Barang</th>
+                      <th>Deskripsi</th>
+                      <th>Stok</th>
+                      <th>Penginput</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% brg.forEach((element, index)=> { %>
+                    <tr>
+                      <td><%= index+1%></td>
+                      <td><%= element.kodebarang %></td>
+                      <td><img src="/uploads/<%= element.image %>" class="zoomable"></td>
+                      <td><%= element.namabarang %></td>
+                      <td><%= element.deskripsi %></td>
+                      <td><%= element.stock %></td>
+                      <td><%= element.penginput %></td>
+                      <td>
+                        <a class="btn btn-info btn-sm" href="/barang/<%= element.idbarang %>" role="button"><i class="fas fa-eye"></i></a>
+                        <% if(typeof locals.user != 'undefined') { %> 
+                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit<%= element.idbarang %>">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete<%= element.idbarang %>">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <% } %> 
+                        <button type="button" class="btn btn-light btn-sm" data-toggle="modal" data-target="#printqr<%= element.idbarang %>">
+                          <i class='fas fa-qrcode'></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <!-- Edit Modal -->
+                    <div class="modal fade" id="edit<%= element.idbarang %>">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Edit Barang</h4>
+                            <button type="button" class="close" onclick="$('#edit<%= element.idbarang %>').modal('hide');">&times;</button>
+                          </div>
+                          <!-- Modal body -->
+                          <form action="/barang/<%= element.idbarang %>?_method=put" method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+                              <input type="hidden" name="oldKode" required value="<%= element.oldKode || element.kodebarang %>"/>
+                              <input type="hidden" name="oldNama" required value="<%= element.oldNama || element.namabarang %>"/>
+                              <input type="hidden" name="idbarang" required value="<%= element.idbarang %>"/>
+                              <input type="hidden" name="image" required value="<%= element.image %>"/>
+                              <div class="form-group">
+                                <label for="kodebarang">Kode Barang</label>
+                                <input type="text" name="kodebarang" class="form-control" placeholder="Kode Barang" required value="<%= element.kodebarang %>" />
+                              </div>
+                              <div class="form-group">
+                                <label for="namabarang">Nama Barang</label>
+                                <input type="text" name="namabarang" class="form-control" placeholder="Nama Barang" required value="<%= element.namabarang %>" />
+                              </div>
+                              <div class="form-group">
+                                <label for="deskripsi">Deskripsi</label>
+                                <textarea name="deskripsi" class="form-control" rows="2" placeholder="Deskripsi" required><%= element.deskripsi %></textarea>
+                              </div>
+                              <div class="form-group">
+                                <label for="stock">Stok</label>
+                                <input type="number" name="stock" class="form-control" min="0" placeholder="Stok" required value="<%= element.stock %>" />
+                              </div>
+                              <div class="form-group">
+                                <label for="image">Gambar</label>
+                                <input type="file" name="image" accept="image/png, image/jpeg" class="form-control-file" />
+                                Maksimal ukuran gambar: 1MB.
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary mb-2">Simpan</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#edit<%= element.idbarang %>').modal('hide');">Tutup</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="delete<%= element.idbarang %>">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Hapus Barang</h4>
+                            <button type="button" class="close" onclick="$('#delete<%= element.idbarang %>').modal('hide');">&times;</button>
+                          </div>
+                          <!-- Modal body -->
+                          <form action="/barang/delete/<%= element.idbarang %>" method="post">
+                            <div class="modal-body">
+                              Apakah Anda yakin ingin menghapus barang <%= element.namabarang %>?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Ya</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#delete<%= element.idbarang %>').modal('hide');">Batal</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Print QR Code Modal -->
+                    <div class="modal fade" id="printqr<%= element.idbarang %>">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Print Kode QR</h4>
+                            <button type="button" class="close" onclick="$('#printqr<%= element.idbarang %>').modal('hide');">&times;</button>
+                          </div>
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            <div class="d-flex justify-content-center">
+                              <b><%= element.kodebarang %> - <%= element.namabarang %></b>
+                            </div>
+                            <div class="d-flex justify-content-center mb-3">
+                              <img src="/uploads/<%= element.kodebarang %> - <%= element.namabarang %>.png">
+                            </div>
+                            <div class="form-group">
+                              <label for="qrQty">Jumlah</label>
+                              <input id="qrQty<%= element.idbarang %>" type="number" class="form-control" name="qrQty" placeholder="Jumlah" value="1" max="999" min="1">
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="PrintImage('/uploads/<%= element.kodebarang %> - <%= element.namabarang %>.png','<%= element.idbarang %>'); return false;">Print</button>
+                            <button type="button" class="btn btn-secondary" onclick="$('#printqr<%= element.idbarang %>').modal('hide');">Tutup</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="add">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Tambah Barang</h4>
+            <button type="button" class="close" onclick="$('#add').modal('hide');">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <form action="/barang" method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="kodebarang">Kode Barang</label>
+                <input type="text" name="kodebarang" class="form-control" placeholder="Kode Barang" required />
+              </div>
+              <div class="form-group">
+                <label for="namabarang">Nama Barang</label>
+                <input type="text" name="namabarang" class="form-control" placeholder="Nama Barang" required />
+              </div>
+              <div class="form-group">
+                <label for="deskripsi">Deskripsi</label>
+                <textarea name="deskripsi" class="form-control" rows="2" placeholder="Deskripsi" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="stock">Stok</label>
+                <input type="number" name="stock" class="form-control" min="1" placeholder="Stok" required />
+              </div>
+              <div class="form-group">
+                <label for="image">Gambar</label>
+                <input type="file" name="image" accept="image/png, image/jpeg" class="form-control-file" required />
+                Maksimal ukuran gambar: 1MB.
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Simpan</button>
+              <button type="button" class="btn btn-secondary" onclick="$('#add').modal('hide');">Tutup</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+<%- include('./layout/footer') %> 

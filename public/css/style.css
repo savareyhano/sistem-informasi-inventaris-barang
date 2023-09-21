@@ -1,0 +1,26 @@
+.zoomable {
+    width: 100%;
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.zoomable:hover {
+    transform: scale(2.5);
+    transition: 0.3s ease;
+}
+
+.img-detail {
+    width: 100%;
+    max-width: 250px;
+    max-height: 250px;
+}
+
+select:required:invalid {
+    color: gray;
+}
+option[value=""][disabled] {
+    display: none;
+}
+option {
+    color: black;
+}

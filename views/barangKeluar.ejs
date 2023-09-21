@@ -1,0 +1,193 @@
+<%- include('./layout/header') %> 
+<%- include('./layout/nav') %> 
+          <div class="col-sm-6">
+            <h1>Barang Keluar</h1>
+          </div>
+          <div class="col-sm-6">
+            <div id="bt" class="float-sm-right">
+              <div class="dt-buttons btn-group flex-wrap">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
+                  <i class="fas fa-plus"></i>
+                  Tambah Barang Keluar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <% if(typeof error != 'undefined'){ %> 
+            <div class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <%= error %> 
+            </div>
+            <% } %> 
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Tabel Barang Keluar</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="barangkeluar" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Tanggal & Waktu</th>
+                      <th>Kode Barang</th>
+                      <th>Nama Barang</th>
+                      <th>Jumlah</th>
+                      <th>Penerima</th>
+                      <th>Penginput</th>
+                      <% if(typeof locals.user != 'undefined') { %>
+                      <th>Aksi</th>
+                      <% } %> 
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% brgk.forEach((element, index)=> { %>
+                    <tr>
+                      <td><%= index+1%></td>
+                      <td><%= moment(element.tanggal).locale('id').format('DD-MM-YYYY HH:mm:ss') %></td>
+                      <td><%= element.kodebarang_k %></td>
+                      <td><%= element.namabarang_k %></td>
+                      <td><%= element.qty %></td>
+                      <td><%= element.penerima %></td>
+                      <td><%= element.penginput %></td>
+                      <% if(typeof locals.user != 'undefined') { %>
+                      <td>
+                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit<%= element.idkeluar %>">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete<%= element.idkeluar %>">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </td>
+                      <% } %> 
+                    </tr>
+
+                    <!-- Edit Modal -->
+                    <div class="modal fade" id="edit<%= element.idkeluar %>">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Edit Barang Keluar</h4>
+                            <button type="button" class="close" onclick="$('#edit<%= element.idkeluar %>').modal('hide');">&times;</button>
+                          </div>
+                          <!-- Modal body -->
+                          <form action="/barangkeluar/<%= element.idkeluar %>?_method=put" method="post">
+                            <div class="modal-body">
+                              <input type="hidden" name="idkeluar" required value="<%= element.idkeluar %>"/>
+                              <input type="hidden" name="idbarang" required value="<%= element.idbarang %>"/>
+                              <div class="form-group">
+                                <label for="qty">Jumlah</label>
+                                <input type="number" name="qty" class="form-control" min="1" placeholder="Jumlah" required value="<%= element.qty %>" />
+                              </div>
+                              <div class="form-group">
+                                <label for="penerima">Penerima</label>
+                                <input type="text" name="penerima" class="form-control" placeholder="Penerima" required value="<%= element.penerima %>" />
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Simpan</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#edit<%= element.idkeluar %>').modal('hide');">Tutup</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <!-- Delete Modal-->
+                    <div class="modal fade" id="delete<%= element.idkeluar %>">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header-->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Hapus Barang Keluar</h4>
+                            <button type="button" class="close" onclick="$('#delete<%= element.idkeluar %>').modal('hide');">&times;</button>
+                          </div>
+                          <!-- Modal body-->
+                          <form action="/barangkeluar/delete/<%= element.idkeluar %>" method="post">
+                            <div class="modal-body">
+                              Apakah Anda yakin ingin menghapus barang keluar <%= element.namabarang_k %> pada tanggal <%= moment(element.tanggal).locale('id').format('DD-MM-YYYY [jam] HH:mm:ss') %>?
+                              <input type="hidden" name="idkeluar" required value="<%= element.idkeluar %>">
+                              <input type="hidden" name="idbarang" required value="<%= element.idbarang %>">
+                              <input type="hidden" name="qty" required value="<%= element.qty %>">
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Ya</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#delete<%= element.idkeluar %>').modal('hide');">Batal</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="add">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Tambah Barang Keluar</h4>
+            <button type="button" class="close" onclick="$('#add').modal('hide');stopScan();">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <form action="/barangkeluar" method="post">
+            <div class="modal-body">
+              <div class="form-group">
+                <div id="reader"></div>
+              </div>
+              <div class="form-group">
+                <label for="barang">Pilih Barang</label>
+                <select class="form-control select2bs4" id="barang" name="barang" required>
+                  <option value="" disabled selected>Pilih Barang</option>
+                  <% brg.forEach((element)=> { %>
+                  <% if(element.stock>0) { %> 
+                  <option value="<%= element.idbarang %>"><%= element.kodebarang %> - <%= element.namabarang %></option>
+                  <% } else { %> 
+                  <option value="<%= element.idbarang %>"><%= element.kodebarang %> - <%= element.namabarang %> (Habis)</option>
+                  <% } %> 
+                  <% }) %> 
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="qty">Jumlah</label>
+                <input type="number" name="qty" class="form-control" placeholder="Jumlah" min="1" required />
+              </div>
+              <div class="form-group">
+                <label for="penerima">Penerima</label>
+                <input type="text" name="penerima" class="form-control" placeholder="Penerima" required />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Simpan</button>
+              <button type="button" class="btn btn-secondary" onclick="$('#add').modal('hide');stopScan();">Tutup</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+<%- include('./layout/footer') %> 

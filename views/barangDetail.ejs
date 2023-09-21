@@ -1,0 +1,100 @@
+<%- include('./layout/header') %> 
+<%- include('./layout/nav') %> 
+          <div class="col-sm-6">
+            <h1>Detail Barang</h1>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card">
+          <div class="card-header">
+              <h2><%= brg.namabarang %></h2>
+              <img src="/uploads/<%= brg.image %>" class="img-detail">
+              <img src="/uploads/<%= brg.kodebarang %> - <%= brg.namabarang %>.png" class="img-detail">
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3">Kode Barang</div>
+              <div class="col-md-9">: <%= brg.kodebarang %></div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">Deskripsi</div>
+              <div class="col-md-9">: <%= brg.deskripsi %></div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">Stok</div>
+              <div class="col-md-9">: <%= brg.stock %></div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">Penginput</div>
+              <div class="col-md-9">: <%= brg.penginput %></div>
+            </div>
+
+            <br><br><br>
+
+            <h3>Barang Masuk</h3>
+            <table id="detailbarangmasuk" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Tanggal & Waktu</th>
+                  <th>Kode Barang</th>
+                  <th>Nama Barang</th>
+                  <th>Jumlah</th>
+                  <th>Keterangan</th>
+                  <th>Penginput</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% brgm.forEach((element, index)=> { %>
+                <tr>
+                  <td><%= index+1%></td>
+                  <td><%= moment(element.tanggal).locale('id').format('DD-MM-YYYY HH:mm:ss') %></td>
+                  <td><%= element.kodebarang_m %></td>
+                  <td><%= element.namabarang_m %></td>
+                  <td><%= element.qty %></td>
+                  <td><%= element.keterangan %></td>
+                  <td><%= element.penginput %></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+
+            <br><br>
+
+            <h3>Barang Keluar</h3>
+            <table id="detailbarangkeluar" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Tanggal & Waktu</th>
+                  <th>Kode Barang</th>
+                  <th>Nama Barang</th>
+                  <th>Jumlah</th>
+                  <th>Penerima</th>
+                  <th>Penginput</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% brgk.forEach((element, index)=> { %>
+                <tr>
+                  <td><%= index+1%></td>
+                  <td><%= moment(element.tanggal).locale('id').format('DD-MM-YYYY HH:mm:ss') %></td>
+                  <td><%= element.kodebarang_k %></td>
+                  <td><%= element.namabarang_k %></td>
+                  <td><%= element.qty %></td>
+                  <td><%= element.penerima %></td>
+                  <td><%= element.penginput %></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+<%- include('./layout/footer') %> 

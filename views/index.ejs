@@ -1,0 +1,98 @@
+<%- include('./layout/header') %> 
+<%- include('./layout/nav') %> 
+          <div class="col-sm-6">
+            <h1 class="m-0">Dasbor</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <% if(totalStock>0) { %> 
+                <h3><%= totalStock %></h3>
+                <% }else{ %> 
+                <h3>0</h3>
+                <% } %> 
+
+                <p>Stok Barang</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-boxes"></i>
+              </div>
+              <a href="/barang" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <% if(totalQtyBM>0) { %> 
+                <h3><%= totalQtyBM %></h3>
+                <% }else{ %> 
+                <h3>0</h3>
+                <% } %> 
+
+                <p>Barang Masuk</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-box"></i>
+              </div>
+              <a href="/barangmasuk" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <% if(totalQtyBK>0) { %> 
+                <h3><%= totalQtyBK %></h3>
+                <% }else{ %> 
+                <h3>0</h3>
+                <% } %> 
+
+                <p>Barang Keluar</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-box-open"></i>
+              </div>
+              <a href="/barangkeluar" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <% if(typeof locals.user != 'undefined') { %>
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <% if(totalUsers>0) { %> 
+                <h3><%= totalUsers %></h3>
+                <% }else{ %>
+                <h3>0</h3> 
+                <% } %> 
+
+                <p>Pengguna</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <a href="/users" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <% } %> 
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+<%- include('./layout/footer') %> 
