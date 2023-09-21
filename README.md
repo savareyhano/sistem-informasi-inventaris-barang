@@ -13,6 +13,8 @@ An inventory management application. This is my Final Project for WGS Bootcamp B
 
 ## Project Screenshots
 
+**Note:** If the image doesn't load, refresh the page.
+
 **Dashboard**
 ![Dashboard](https://drive.google.com/uc?id=1yuC7Kiy_AFIaoQAMqnk9y1FYAPszi7DR)
 
@@ -27,7 +29,7 @@ An inventory management application. This is my Final Project for WGS Bootcamp B
 ![Scan QR2](https://drive.google.com/uc?id=1l_3E9EsYOuefDA6q-orAP_Bd_k8keb_9)
 
 **Dark Mode**
-![Scan QR](https://drive.google.com/uc?id=1ZNM_EChIzNhLK7KBfq3L3mvz7qRfYeW4)
+![Dark Mode](https://drive.google.com/uc?id=1ZNM_EChIzNhLK7KBfq3L3mvz7qRfYeW4)
 
 ## Installation and Setup Instructions
 
