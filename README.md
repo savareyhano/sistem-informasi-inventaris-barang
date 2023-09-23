@@ -37,4 +37,4 @@ To be added.
 
 ## License
 
-Sistem Informasi Inventaris Barang is released under the Apache License 2.0. [See LICENSE](https://github.com/savareyhano/Sistem-Informasi-Inventaris-Barang/blob/main/LICENSE) for details.
+Sistem Informasi Inventaris Barang is released under the GNU General Public License v3.0. [See LICENSE](https://github.com/savareyhano/Sistem-Informasi-Inventaris-Barang/blob/main/LICENSE) for details.
