@@ -9,8 +9,7 @@ An inventory management application. This is my Final Project for WGS Bootcamp B
 
 ### TODO
 
-- [ ] Add Import and Export features.
-- [ ] Fix the authentication (add cookie to store the session).
+- [x] Fix the authentication (add cookie to store the session).
 - [ ] Refactor the codes.
 
 ## Project Screenshots

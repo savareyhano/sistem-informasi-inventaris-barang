@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const bodyparser = require("body-parser");
-const session = require("express-session");
+const cookieSession = require("cookie-session");
 const { v4: uuidv4 } = require("uuid");
 
 const router = require("./router");
@@ -29,21 +29,14 @@ app.use("/dist", express.static(path.join(__dirname, "public/dist")));
 app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
 
 app.use(
-  session({
-    secret: uuidv4(),
-    resave: false,
-    saveUninitialized: true,
+  cookieSession({
+    name: "session",
+    keys: [uuidv4()],
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
   })
 );
 
-// app.use('/route', router);
-
 app.use(router);
-
-// home route
-// app.get('/', (req, res)=>{
-//     res.render('login', { title : "Login"})
-// })
 
 app.use("/", (req, res) => {
   res.status(404);

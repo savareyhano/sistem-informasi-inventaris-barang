@@ -68,7 +68,7 @@ async function setupDatabase() {
       error.message.includes("duplicate_database")
     ) {
       readline.question(
-        `Database ${process.env.PGDATABASE} already exists. Continue with restoration? Current data will be replaced (y/n) `,
+        `Database ${process.env.PGDATABASE} already exists. Proceed with restoration? Existing data will be replaced. (Y/N) `,
         async (answer) => {
           if (answer.toLowerCase() === "y") {
             try {

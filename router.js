@@ -24,15 +24,15 @@ router.use(methodOverride("_method"));
 // Morgan
 const custom = (tokens, req, res) => {
   if (req.session) {
-    if (req.session.superadmin) {
-      const usr = req.session.superadmin;
+    if (req.session.user && req.session.user.role === "superadmin") {
+      const usr = req.session.user.email;
       const method = tokens.method(req, res);
       const endpoint = tokens.url(req, res);
       const statusCode = tokens.status(req, res);
 
       log.addLog(usr, method, endpoint, statusCode);
-    } else if (req.session.user) {
-      const usr = req.session.user;
+    } else if (req.session.user && req.session.user.role === "user") {
+      const usr = req.session.user.email;
       const method = tokens.method(req, res);
       const endpoint = tokens.url(req, res);
       const statusCode = tokens.status(req, res);
@@ -84,14 +84,20 @@ router.post("/login", async (req, res) => {
     checkPass &&
     (await user.checkRole(email)) == "superadmin"
   ) {
-    req.session.superadmin = email;
+    req.session.user = {
+      email: email,
+      role: "superadmin",
+    };
     res.redirect("/");
   } else if (
     email == (await user.email(email)) &&
     checkPass &&
     (await user.checkRole(email)) == "user"
   ) {
-    req.session.user = email;
+    req.session.user = {
+      email: email,
+      role: "user",
+    };
     res.redirect("/");
   } else {
     res.render("login", {
@@ -102,26 +108,26 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     const totalStock = await stok.totalStock();
     const totalQtyBM = await bmasuk.totalQty();
     const totalQtyBK = await bkeluar.totalQty();
     const totalUsers = await user.totalUsers();
     res.render("index", {
-      user: req.session.superadmin,
+      user: req.session.user.email,
       title: "Dasbor",
       totalStock: totalStock,
       totalQtyBM: totalQtyBM,
       totalQtyBK: totalQtyBK,
       totalUsers: totalUsers,
     });
-  } else if (req.session.user) {
+  } else if (req.session.user && req.session.user.role === "user") {
     const totalStock = await stok.totalStock();
     const totalQtyBM = await bmasuk.totalQty();
     const totalQtyBK = await bkeluar.totalQty();
     const totalUsers = await user.totalUsers();
     res.render("index", {
-      us: req.session.user,
+      us: req.session.user.email,
       title: "Dasbor",
       totalStock: totalStock,
       totalQtyBM: totalQtyBM,
@@ -134,11 +140,11 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/users", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     const users = await user.getUsers();
     res.render("user", {
       usr: users,
-      user: req.session.superadmin,
+      user: req.session.user.email,
       title: "Kelola Pengguna",
     });
   } else {
@@ -157,7 +163,7 @@ router.post(
     return true;
   }),
   async (req, res) => {
-    if (req.session.superadmin) {
+    if (req.session.user && req.session.user.role === "superadmin") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         const users = await user.getUsers();
@@ -165,7 +171,7 @@ router.post(
           title: "Kelola Pengguna",
           errors: errors.array(),
           usr: users,
-          user: req.session.superadmin,
+          user: req.session.user.email,
         });
       } else {
         let email = req.body.email;
@@ -193,7 +199,7 @@ router.put(
     return true;
   }),
   async (req, res) => {
-    if (req.session.superadmin) {
+    if (req.session.user && req.session.user.role === "superadmin") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         const users = await user.getUsers();
@@ -201,7 +207,7 @@ router.put(
           title: "Kelola Pengguna",
           errors: errors.array(),
           usr: users,
-          user: req.session.superadmin,
+          user: req.session.user.email,
         });
       } else {
         await user.updateUser(req.body);
@@ -215,7 +221,7 @@ router.put(
 );
 
 router.post("/users/delete/:id", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     await user.delUser(req.params.id);
     res.redirect("/users");
   } else {
@@ -225,13 +231,13 @@ router.post("/users/delete/:id", async (req, res) => {
 });
 
 router.post("/users/resetpassword/:id", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     password = await bcrypt.hash("password", 10);
     await user.updatePassword(password, req.params.id);
     const users = await user.getUsers();
     res.render("user", {
       usr: users,
-      user: req.session.superadmin,
+      user: req.session.user.email,
       title: "Kelola Pengguna",
       resetSuccess: "Reset kata sandi berhasil.",
     });
@@ -242,18 +248,18 @@ router.post("/users/resetpassword/:id", async (req, res) => {
 });
 
 router.get("/account", async (req, res) => {
-  if (req.session.superadmin) {
-    const users = await user.checkProfile(req.session.superadmin);
+  if (req.session.user && req.session.user.role === "superadmin") {
+    const users = await user.checkProfile(req.session.user.email);
     res.render("account", {
       usr: users,
-      user: req.session.superadmin,
+      user: req.session.user.email,
       title: "Edit Akun",
     });
-  } else if (req.session.user) {
-    const users = await user.checkProfile(req.session.user);
+  } else if (req.session.user && req.session.user.role === "user") {
+    const users = await user.checkProfile(req.session.user.email);
     res.render("account", {
       usr: users,
-      us: req.session.user,
+      us: req.session.user.email,
       title: "Edit Akun",
     });
   } else {
@@ -284,30 +290,21 @@ router.put(
     return true;
   }),
   async (req, res) => {
-    if (
-      req.session.superadmin &&
-      req.session.superadmin !== "superadmin@gmail.com"
-    ) {
+    if (req.session.user && req.session.user.email !== "superadmin@gmail.com") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         res.render("account", {
           title: "Akun",
           errors: errors.array(),
           usr: req.body,
-          user: req.session.superadmin,
+          user: req.session.user.email,
         });
       } else {
         await user.updateEmail(req.body);
-        req.session.destroy(function (err) {
-          if (err) {
-            console.log(err);
-            res.send("Error");
-          } else {
-            res.render("login", {
-              title: "Login",
-              logout: "Ganti email berhasil, silahkan masuk kembali.",
-            });
-          }
+        req.session = null;
+        res.render("login", {
+          title: "Login",
+          logout: "Ganti email berhasil, silahkan masuk kembali.",
         });
       }
     } else {
@@ -344,56 +341,44 @@ router.put(
     return true;
   }),
   async (req, res) => {
-    if (req.session.superadmin) {
+    if (req.session.user && req.session.user.role === "superadmin") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         res.render("account", {
           title: "Akun",
           errors: errors.array(),
           usr: req.body,
-          user: req.session.superadmin,
+          user: req.session.user.email,
         });
       } else {
         let password = await bcrypt.hash(req.body.password, 10);
         let id = req.body.id;
 
         await user.updatePassword(password, id);
-        req.session.destroy(function (err) {
-          if (err) {
-            console.log(err);
-            res.send("Error");
-          } else {
-            res.render("login", {
-              title: "Login",
-              logout: "Ganti kata sandi berhasil, silahkan masuk kembali.",
-            });
-          }
+        req.session = null;
+        res.render("login", {
+          title: "Login",
+          logout: "Ganti kata sandi berhasil, silahkan masuk kembali.",
         });
       }
-    } else if (req.session.user) {
+    } else if (req.session.user && req.session.user.role === "user") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         res.render("account", {
           title: "Akun",
           errors: errors.array(),
           usr: req.body,
-          us: req.session.user,
+          us: req.session.user.email,
         });
       } else {
         let password = await bcrypt.hash(req.body.password, 10);
         let id = req.body.id;
 
         await user.updatePassword(password, id);
-        req.session.destroy(function (err) {
-          if (err) {
-            console.log(err);
-            res.send("Error");
-          } else {
-            res.render("login", {
-              title: "Login",
-              logout: "Ganti kata sandi berhasil, silahkan masuk kembali.",
-            });
-          }
+        req.session = null;
+        res.render("login", {
+          title: "Login",
+          logout: "Ganti kata sandi berhasil, silahkan masuk kembali.",
         });
       }
     } else {
@@ -413,30 +398,21 @@ router.put(
     return true;
   }),
   async (req, res) => {
-    if (
-      req.session.superadmin &&
-      req.session.superadmin !== "superadmin@gmail.com"
-    ) {
+    if (req.session.user && req.session.user.email !== "superadmin@gmail.com") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         res.render("account", {
           title: "Akun",
           errors: errors.array(),
           usr: req.body,
-          user: req.session.superadmin,
+          user: req.session.user.email,
         });
       } else {
         await user.updateRole(req.body);
-        req.session.destroy(function (err) {
-          if (err) {
-            console.log(err);
-            res.send("Error");
-          } else {
-            res.render("login", {
-              title: "Login",
-              logout: "Ganti role berhasil, silahkan masuk kembali.",
-            });
-          }
+        req.session = null;
+        res.render("login", {
+          title: "Login",
+          logout: "Ganti role berhasil, silahkan masuk kembali.",
         });
       }
     } else {
@@ -447,17 +423,17 @@ router.put(
 );
 
 router.get("/barang", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     const barang = await stok.getBarang();
     res.render("barang", {
-      user: req.session.superadmin,
+      user: req.session.user.email,
       title: "Stok Barang",
       brg: barang,
     });
-  } else if (req.session.user) {
+  } else if (req.session.user && req.session.user.role === "user") {
     const barang = await stok.getBarang();
     res.render("barang", {
-      us: req.session.user,
+      us: req.session.user.email,
       title: "Stok Barang",
       brg: barang,
     });
@@ -468,27 +444,27 @@ router.get("/barang", async (req, res) => {
 });
 
 router.get("/barang/:id", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     const barang = await stok.getDetail(req.params.id);
     const barangMasuk = await bmasuk.getDetailBarang(req.params.id);
     const barangKeluar = await bkeluar.getDetailBarang(req.params.id);
 
     res.render("barangDetail", {
       brg: barang,
-      user: req.session.superadmin,
+      user: req.session.user.email,
       title: "Detail Barang",
       brgm: barangMasuk,
       brgk: barangKeluar,
       moment,
     });
-  } else if (req.session.user) {
+  } else if (req.session.user && req.session.user.role === "user") {
     const barang = await stok.getDetail(req.params.id);
     const barangMasuk = await bmasuk.getDetailBarang(req.params.id);
     const barangKeluar = await bkeluar.getDetailBarang(req.params.id);
 
     res.render("barangDetail", {
       brg: barang,
-      us: req.session.user,
+      us: req.session.user.email,
       title: "Detail Barang",
       brgm: barangMasuk,
       brgk: barangKeluar,
@@ -525,7 +501,7 @@ router.post(
     return true;
   }),
   async (req, res) => {
-    if (req.session.superadmin) {
+    if (req.session.user && req.session.user.role === "superadmin") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         let img = req.file.filename;
@@ -540,7 +516,7 @@ router.post(
         res.render("barang", {
           title: "Stok Barang",
           errors: errors.array(),
-          user: req.session.superadmin,
+          user: req.session.user.email,
           brg: barang,
         });
       } else {
@@ -548,7 +524,7 @@ router.post(
         let deskripsi = req.body.deskripsi;
         let stock = req.body.stock;
         let image = req.file.filename;
-        let penginput = req.session.superadmin;
+        let penginput = req.session.user.email;
         let kodebarang = req.body.kodebarang;
 
         await stok.addBarang(
@@ -570,7 +546,7 @@ router.post(
 
         res.redirect("/barang");
       }
-    } else if (req.session.user) {
+    } else if (req.session.user && req.session.user.role === "user") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         let img = req.file.filename;
@@ -585,7 +561,7 @@ router.post(
         res.render("barang", {
           title: "Stok Barang",
           errors: errors.array(),
-          us: req.session.user,
+          us: req.session.user.email,
           brg: barang,
         });
       } else {
@@ -593,7 +569,7 @@ router.post(
         let deskripsi = req.body.deskripsi;
         let stock = req.body.stock;
         let image = req.file.filename;
-        let penginput = req.session.user;
+        let penginput = req.session.user.email;
         let kodebarang = req.body.kodebarang;
 
         await stok.addBarang(
@@ -649,7 +625,7 @@ router.put(
     return true;
   }),
   async (req, res) => {
-    if (req.session.superadmin) {
+    if (req.session.user && req.session.user.role === "superadmin") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         if (req.file) {
@@ -668,7 +644,7 @@ router.put(
           title: "Stok Barang",
           errors: errors.array(),
           brg: barang,
-          user: req.session.superadmin,
+          user: req.session.user.email,
         });
       } else {
         if (req.file) {
@@ -763,7 +739,7 @@ router.put(
 );
 
 router.post("/barang/delete/:id", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     const image = await stok.getImage(req.params.id);
     const kode = await stok.getKode(req.params.id);
     const nama = await stok.getNama(req.params.id);
@@ -786,21 +762,21 @@ router.post("/barang/delete/:id", async (req, res) => {
 });
 
 router.get("/barangmasuk", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     const barangMasuk = await bmasuk.getBarangM();
     const barang = await stok.getBarang();
     res.render("barangMasuk", {
-      user: req.session.superadmin,
+      user: req.session.user.email,
       title: "Barang Masuk",
       brgm: barangMasuk,
       moment,
       brg: barang,
     });
-  } else if (req.session.user) {
+  } else if (req.session.user && req.session.user.role === "user") {
     const barangMasuk = await bmasuk.getBarangM();
     const barang = await stok.getBarang();
     res.render("barangMasuk", {
-      us: req.session.user,
+      us: req.session.user.email,
       title: "Barang Masuk",
       brgm: barangMasuk,
       moment,
@@ -813,12 +789,12 @@ router.get("/barangmasuk", async (req, res) => {
 });
 
 router.post("/barangmasuk", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     let idbarang = req.body.barang;
     let keterangan = req.body.keterangan;
     let qty = req.body.qty;
     let namabarang_m = await stok.getNama(idbarang);
-    let penginput = req.session.superadmin;
+    let penginput = req.session.user.email;
     let kodebarang_m = await stok.getKode(idbarang);
 
     stock = await stok.getStock(idbarang);
@@ -835,12 +811,12 @@ router.post("/barangmasuk", async (req, res) => {
     );
 
     res.redirect("/barangmasuk");
-  } else if (req.session.user) {
+  } else if (req.session.user && req.session.user.role === "user") {
     let idbarang = req.body.barang;
     let keterangan = req.body.keterangan;
     let qty = req.body.qty;
     let namabarang_m = await stok.getNama(idbarang);
-    let penginput = req.session.user;
+    let penginput = req.session.user.email;
     let kodebarang_m = await stok.getKode(idbarang);
 
     stock = await stok.getStock(idbarang);
@@ -864,7 +840,7 @@ router.post("/barangmasuk", async (req, res) => {
 });
 
 router.put("/barangmasuk/:id", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     let idbarang = req.body.idbarang;
     let keterangan = req.body.keterangan;
     let qty = req.body.qty;
@@ -891,7 +867,7 @@ router.put("/barangmasuk/:id", async (req, res) => {
           const barangMasuk = await bmasuk.getBarangM();
           const barang = await stok.getBarang();
           res.render("barangMasuk", {
-            user: req.session.superadmin,
+            user: req.session.user.email,
             title: "Barang Masuk",
             brgm: barangMasuk,
             moment,
@@ -916,7 +892,7 @@ router.put("/barangmasuk/:id", async (req, res) => {
 });
 
 router.post("/barangmasuk/delete/:id", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     let idbarang = req.body.idbarang;
     let qty = req.body.qty;
     let idmasuk = req.body.idmasuk;
@@ -932,7 +908,7 @@ router.post("/barangmasuk/delete/:id", async (req, res) => {
         const barangMasuk = await bmasuk.getBarangM();
         const barang = await stok.getBarang();
         res.render("barangMasuk", {
-          user: req.session.superadmin,
+          user: req.session.user.email,
           title: "Barang Masuk",
           brgm: barangMasuk,
           moment,
@@ -958,21 +934,21 @@ router.post("/barangmasuk/delete/:id", async (req, res) => {
 });
 
 router.get("/barangkeluar", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     const barangKeluar = await bkeluar.getBarangK();
     const barang = await stok.getBarang();
     res.render("barangKeluar", {
-      user: req.session.superadmin,
+      user: req.session.user.email,
       title: "Barang Keluar",
       brgk: barangKeluar,
       moment,
       brg: barang,
     });
-  } else if (req.session.user) {
+  } else if (req.session.user && req.session.user.role === "user") {
     const barangKeluar = await bkeluar.getBarangK();
     const barang = await stok.getBarang();
     res.render("barangKeluar", {
-      us: req.session.user,
+      us: req.session.user.email,
       title: "Barang Keluar",
       brgk: barangKeluar,
       moment,
@@ -985,12 +961,12 @@ router.get("/barangkeluar", async (req, res) => {
 });
 
 router.post("/barangkeluar", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     let idbarang = req.body.barang;
     let penerima = req.body.penerima;
     let qty = req.body.qty;
     let namabarang_k = await stok.getNama(idbarang);
-    let penginput = req.session.superadmin;
+    let penginput = req.session.user.email;
     let kodebarang_k = await stok.getKode(idbarang);
 
     stock = await stok.getStock(idbarang);
@@ -1000,7 +976,7 @@ router.post("/barangkeluar", async (req, res) => {
       const barangKeluar = await bkeluar.getBarangK();
       const barang = await stok.getBarang();
       res.render("barangKeluar", {
-        user: req.session.superadmin,
+        user: req.session.user.email,
         title: "Barang Keluar",
         brgk: barangKeluar,
         moment,
@@ -1020,12 +996,12 @@ router.post("/barangkeluar", async (req, res) => {
 
       res.redirect("/barangkeluar");
     }
-  } else if (req.session.user) {
+  } else if (req.session.user && req.session.user.role === "user") {
     let idbarang = req.body.barang;
     let penerima = req.body.penerima;
     let qty = req.body.qty;
     let namabarang_k = await stok.getNama(idbarang);
-    let penginput = req.session.user;
+    let penginput = req.session.user.email;
     let kodebarang_k = await stok.getKode(idbarang);
 
     stock = await stok.getStock(idbarang);
@@ -1035,7 +1011,7 @@ router.post("/barangkeluar", async (req, res) => {
       const barangKeluar = await bkeluar.getBarangK();
       const barang = await stok.getBarang();
       res.render("barangKeluar", {
-        us: req.session.user,
+        us: req.session.user.email,
         title: "Barang Keluar",
         brgk: barangKeluar,
         moment,
@@ -1062,7 +1038,7 @@ router.post("/barangkeluar", async (req, res) => {
 });
 
 router.put("/barangkeluar/:id", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     let idbarang = req.body.idbarang;
     let penerima = req.body.penerima;
     let qty = req.body.qty;
@@ -1083,7 +1059,7 @@ router.put("/barangkeluar/:id", async (req, res) => {
           const barangKeluar = await bkeluar.getBarangK();
           const barang = await stok.getBarang();
           res.render("barangKeluar", {
-            user: req.session.superadmin,
+            user: req.session.user.email,
             title: "Barang Keluar",
             brgk: barangKeluar,
             moment,
@@ -1114,7 +1090,7 @@ router.put("/barangkeluar/:id", async (req, res) => {
 });
 
 router.post("/barangkeluar/delete/:id", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     let idbarang = req.body.idbarang;
     let qty = req.body.qty;
     let idkeluar = req.body.idkeluar;
@@ -1142,11 +1118,11 @@ router.post("/barangkeluar/delete/:id", async (req, res) => {
 });
 
 router.get("/log", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     const logs = await log.getLog();
     res.render("log", {
       log: logs,
-      user: req.session.superadmin,
+      user: req.session.user.email,
       title: "Log Aplikasi",
       moment,
     });
@@ -1157,7 +1133,7 @@ router.get("/log", async (req, res) => {
 });
 
 router.post("/log/delete", async (req, res) => {
-  if (req.session.superadmin) {
+  if (req.session.user && req.session.user.role === "superadmin") {
     await log.delLog();
     res.redirect("/log");
   } else {
@@ -1168,14 +1144,8 @@ router.post("/log/delete", async (req, res) => {
 
 // route for logout
 router.get("/logout", (req, res) => {
-  req.session.destroy(function (err) {
-    if (err) {
-      console.log(err);
-      res.send("Error");
-    } else {
-      res.render("login", { title: "Login", logout: "Keluar berhasil." });
-    }
-  });
+  req.session = null;
+  res.render("login", { title: "Login", logout: "Keluar berhasil." });
 });
 
 module.exports = router;
