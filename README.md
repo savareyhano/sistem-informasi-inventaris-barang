@@ -3,10 +3,12 @@
 An inventory management application. This is my Final Project for WGS Bootcamp Batch 4.
 
 **Main features**:
+
 - Built-in Bulk QR Code Generator. Can make (technically) infinite amount of QR code of selected items and print it.
 - QR Code Scanner using webcam device.
 
 ### TODO
+
 - [ ] Add Import and Export features.
 - [ ] Fix the authentication (add cookie to store the session).
 - [ ] Refactor the codes.
