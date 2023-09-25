@@ -45,7 +45,7 @@ Make sure the Path for Postgres tools is already set on your system.
 
 1. Create the `.env` file and configure it to match your Postgres database settings. You can refer to the `.env.example` file for guidance.
 2. Open your terminal and run `npm install` to install the required node packages. If any problems occur, try running `npm update`.
-3. Run `npm run setup-db` to create the database. The database name will be the same as the value specified for `PGDATABASE` in the `.env` file. This command will also restore the SQL file into the created database.
+3. Run `npm run setup-db` to create the database. The database name will be the same as the value specified for `PGDATABASE` in the `.env` file. This command will also restore the SQL file (db.sql) into the created database.
 4. Finally, run `npm start` to start the project.
 
 When prompted to log in, use the following credentials:
