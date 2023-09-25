@@ -160,7 +160,7 @@
                               <b><%= element.kodebarang %> - <%= element.namabarang %></b>
                             </div>
                             <div class="d-flex justify-content-center mb-3">
-                              <img src="/uploads/<%= element.kodebarang %> - <%= element.namabarang %>.png">
+                              <img src="/uploads/<%= element.kodebarang %>.png">
                             </div>
                             <div class="form-group">
                               <label for="qrQty">Jumlah</label>
@@ -168,7 +168,7 @@
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="PrintImage('/uploads/<%= element.kodebarang %> - <%= element.namabarang %>.png','<%= element.idbarang %>'); return false;">Print</button>
+                            <button type="button" class="btn btn-primary" onclick="PrintImage('/uploads/<%= element.kodebarang %>.png','<%= element.idbarang %>'); return false;">Print</button>
                             <button type="button" class="btn btn-secondary" onclick="$('#printqr<%= element.idbarang %>').modal('hide');">Tutup</button>
                           </div>
                         </div>

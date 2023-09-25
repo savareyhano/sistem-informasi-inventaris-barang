@@ -62,6 +62,7 @@ async function setupDatabase() {
   try {
     await createDatabase();
     await restoreDatabase();
+    process.exit(0);
   } catch (error) {
     if (
       error instanceof DatabaseError &&
@@ -77,11 +78,9 @@ async function setupDatabase() {
               await restoreDatabase();
             } catch (error) {
               console.error("Error setting up database:", error);
-              process.exit(1);
             }
           } else {
             console.log("Operation cancelled.");
-            process.exit(0);
           }
           readline.close();
         }

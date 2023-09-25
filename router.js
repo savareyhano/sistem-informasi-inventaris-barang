@@ -538,9 +538,9 @@ router.post(
 
         // JsBarcode(canvas, kodebarang);
         // const buffer = canvas.toBuffer("image/png");
-        pat = "./public/uploads/" + kodebarang + " - " + namabarang + ".png";
+        pat = "./public/uploads/" + kodebarang + ".png";
         // fs.writeFileSync(pat, buffer);
-        QRCode.toFile(pat, kodebarang + " - " + namabarang, function (err) {
+        QRCode.toFile(pat, kodebarang, function (err) {
           if (err) return console.log(err);
         });
 
@@ -583,9 +583,9 @@ router.post(
 
         // JsBarcode(canvas, kodebarang);
         // const buffer = canvas.toBuffer("image/png");
-        pat = "./public/uploads/" + kodebarang + " - " + namabarang + ".png";
+        pat = "./public/uploads/" + kodebarang + ".png";
         // fs.writeFileSync(pat, buffer);
-        QRCode.toFile(pat, kodebarang + " - " + namabarang, function (err) {
+        QRCode.toFile(pat, kodebarang, function (err) {
           if (err) return console.log(err);
         });
 
@@ -673,19 +673,18 @@ router.put(
             }
 
             if (kodebarang != oldKode) {
-              pat = "./public/uploads/" + oldKode + " - " + namabarang + ".png";
+              pat = "./public/uploads/" + oldKode + ".png";
               if (fs.existsSync(pat)) {
                 await unlinkAsync(pat);
               }
 
               // JsBarcode(canvas, kodebarang);
               // const buffer = canvas.toBuffer("image/png");
-              pat =
-                "./public/uploads/" + kodebarang + " - " + namabarang + ".png";
+              pat = "./public/uploads/" + kodebarang + ".png";
               // fs.writeFileSync(pat, buffer);
               QRCode.toFile(
                 pat,
-                kodebarang + " - " + namabarang,
+                kodebarang,
                 function (err) {
                   if (err) return console.log(err);
                 }
@@ -713,17 +712,16 @@ router.put(
           );
 
           if (kodebarang != oldKode) {
-            pat = "./public/uploads/" + oldKode + " - " + namabarang + ".png";
+            pat = "./public/uploads/" + oldKode + ".png";
             if (fs.existsSync(pat)) {
               await unlinkAsync(pat);
             }
 
             // JsBarcode(canvas, kodebarang);
             // const buffer = canvas.toBuffer("image/png");
-            pat =
-              "./public/uploads/" + kodebarang + " - " + namabarang + ".png";
+            pat = "./public/uploads/" + kodebarang + ".png";
             // fs.writeFileSync(pat, buffer);
-            QRCode.toFile(pat, kodebarang + " - " + namabarang, function (err) {
+            QRCode.toFile(pat, kodebarang, function (err) {
               if (err) return console.log(err);
             });
           }
@@ -750,7 +748,7 @@ router.post("/barang/delete/:id", async (req, res) => {
     if (fs.existsSync(pth)) {
       await unlinkAsync(pth);
     }
-    pat = "./public/uploads/" + kode + " - " + nama + ".png";
+    pat = "./public/uploads/" + kode + ".png";
     if (fs.existsSync(pat)) {
       await unlinkAsync(pat);
     }
