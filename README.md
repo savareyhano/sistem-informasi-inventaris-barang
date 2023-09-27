@@ -9,8 +9,8 @@ An inventory management application. This is my Final Project for WGS Bootcamp B
 
 ### TODO
 
-- ~~[x] Fix the authentication (add cookie to store the session).~~
-- ~~[x] Refactor the codes.~~
+- [x] ~~Fix the authentication (add cookie to store the session).~~
+- [x] ~~Refactor the codes.~~
 
 ## Project Screenshots
 
@@ -39,7 +39,7 @@ An inventory management application. This is my Final Project for WGS Bootcamp B
 - [Node](https://nodejs.org/en/download/current)
 - [PostgreSQL](https://www.postgresql.org/download/)
 
-Make sure the Path for Postgres tools is already set on your system. Read [here](https://www.commandprompt.com/education/how-to-set-windows-path-for-postgres-tools/) to know how.
+Make sure the Path for Postgres tools is already set on your system. [Read here](https://www.commandprompt.com/education/how-to-set-windows-path-for-postgres-tools/) to know how.
 
 **Steps**:
 
