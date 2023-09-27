@@ -5,15 +5,14 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
-    "setup-db": "node setup-db.js"
+    "start": "nodemon src/server.js",
+    "setup-db": "node setup-db/setup-db.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
-    "body-parser": "^1.20.1",
     "canvas": "^2.11.0",
     "cookie-session": "^2.0.0",
     "dotenv": "^16.3.1",

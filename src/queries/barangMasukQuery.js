@@ -1,4 +1,4 @@
-const pool = require("../database");
+const pool = require("../config/database");
 
 // const getBarangMasuk = async () => {
 //     const {rows : brg} = await pool.query(`SELECT * FROM public.masuk m, public.stock s where s.idbarang = m.idbarang`)

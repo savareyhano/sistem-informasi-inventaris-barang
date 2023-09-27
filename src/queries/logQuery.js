@@ -1,4 +1,4 @@
-const pool = require("../database");
+const pool = require("../config/database");
 
 const getLog = async () => {
   const { rows: log } = await pool.query(
