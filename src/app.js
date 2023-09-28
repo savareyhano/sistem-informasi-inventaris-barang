@@ -1,8 +1,8 @@
 const express = require("express");
-const path = require("path");
-const cookieSession = require("cookie-session");
-const { v4: uuidv4 } = require("uuid");
 const methodOverride = require("method-override");
+const cookieSession = require("cookie-session");
+const crypto = require("crypto");
+const path = require("path");
 const morgan = require("morgan");
 
 const log = require("./queries/logQuery");
@@ -25,7 +25,7 @@ app.use(methodOverride("_method"));
 app.use(
   cookieSession({
     name: "session",
-    keys: [uuidv4()],
+    keys: [crypto.randomBytes(16).toString("hex")],
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   })
 );
