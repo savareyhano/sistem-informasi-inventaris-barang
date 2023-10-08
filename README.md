@@ -14,23 +14,21 @@ An inventory management application. This is my Final Project for WGS Bootcamp B
 
 ## Project Screenshots
 
-**Note**: If the image doesn't load, refresh the page.
-
 **Dashboard**<br>
-![Dashboard](https://drive.google.com/uc?id=1yuC7Kiy_AFIaoQAMqnk9y1FYAPszi7DR)
+![Dashboard](https://user-images.githubusercontent.com/32730327/273454645-93f713e4-ae39-46f9-8557-5403794b8104.png)
 
 **Table**<br>
-![Table](https://drive.google.com/uc?id=18YWFAbevDwTxNy7UhvFXjiv1E0rsy7pR)
+![Table](https://user-images.githubusercontent.com/32730327/273454711-420e7794-6de7-4a96-bd93-51c745c4e983.png)
 
 **Print QR Code**<br>
-![Print QR](https://drive.google.com/uc?id=1I0q6t7GiUn5h0dgjI-2a0MkE_uCmk0GL)
+![Print QR](https://user-images.githubusercontent.com/32730327/273454740-4a5de934-0a78-47ca-b92d-11419febe76f.png)
 
 **Scan QR Code**<br>
-![Scan QR1](https://drive.google.com/uc?id=11UdorMEwZNs_lH8V_RS0gWUMO4wI7ND_)
-![Scan QR2](https://drive.google.com/uc?id=1l_3E9EsYOuefDA6q-orAP_Bd_k8keb_9)
+![Scan QR1](https://user-images.githubusercontent.com/32730327/273454801-d9c2f9e0-5ee1-4708-8283-656e787ce9f2.png)
+![Scan QR2](https://user-images.githubusercontent.com/32730327/273454805-ca0edc90-de09-4def-a2fa-9fa7cfe7dfb0.png)
 
 **Dark Mode**<br>
-![Dark Mode](https://drive.google.com/uc?id=1ZNM_EChIzNhLK7KBfq3L3mvz7qRfYeW4)
+![Dark Mode](https://user-images.githubusercontent.com/32730327/273454814-4f1d843c-59bf-4469-bb28-92ebf73f9caa.png)
 
 ## Installation and Setup Instructions
 
