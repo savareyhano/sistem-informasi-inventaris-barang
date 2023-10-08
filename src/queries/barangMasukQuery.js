@@ -73,7 +73,6 @@ const totalQty = async () => {
 };
 
 module.exports = {
-  // getBarangMasuk,
   getDetail,
   getQty,
   addBarangMasuk,

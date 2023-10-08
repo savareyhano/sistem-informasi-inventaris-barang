@@ -15,13 +15,3 @@ exports.getLog = async (req, res) => {
     res.render("401", { title: "401 Error" });
   }
 };
-
-exports.deleteLog = async (req, res) => {
-  if (req.session.user && req.session.user.role === "superadmin") {
-    await log.delLog();
-    res.redirect("/log");
-  } else {
-    res.status(401);
-    res.render("401", { title: "401 Error" });
-  }
-};

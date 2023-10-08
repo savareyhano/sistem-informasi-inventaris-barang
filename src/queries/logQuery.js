@@ -14,13 +14,12 @@ const addLog = (usr, method, endpoint, statusCode) => {
   return add;
 };
 
-const delLog = async () => {
-  const del = await pool.query(`DELETE FROM public.log`);
-  return del;
-};
+// const delLog = async () => {
+//   const del = await pool.query(`DELETE FROM public.log`);
+//   return del;
+// };
 
 module.exports = {
   getLog,
   addLog,
-  delLog,
 };
