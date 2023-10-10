@@ -15,6 +15,8 @@ An inventory management application. This is my final project for WGS Bootcamp B
   - [Print QR Code](#print-qr-code)
   - [Scan QR Code](#scan-qr-code)
   - [Dark Mode](#dark-mode)
+- [GitHub Workflows](#github-workflows)
+  - [auto-merge](#auto-merge)
 - [License](#license)
 
 ## First Time Setup
@@ -100,6 +102,16 @@ Make sure the PATH for Postgres tools is already set on your system. For Windows
 ### Dark Mode
 
 ![Dark Mode](https://user-images.githubusercontent.com/32730327/273454814-4f1d843c-59bf-4469-bb28-92ebf73f9caa.png)
+
+## GitHub Workflows
+
+### auto-merge
+
+This project has [Dependabot Auto Merge](https://github.com/marketplace/actions/dependabot-auto-merge) installed to automate the merging of Dependabot PRs. 
+
+Secrets:
+
+- `MYTOKEN` (must be added in the Dependabot secrets)
 
 ## License
 
