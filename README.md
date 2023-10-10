@@ -7,7 +7,7 @@ An inventory management application. This is my final project for WGS Bootcamp B
 - [First Time Setup](#first-time-setup)
   - [Prerequisite](#prerequisite)
   - [Installation](#installation)
-  - [Running Locally](#running-locally)
+- [Running Locally](#running-locally)
 - [Main Features](#main-features)
 - [Screenshots](#screenshots)
   - [Dashboard](#dashboard)
@@ -61,7 +61,7 @@ Make sure the PATH for Postgres tools is already set on your system. For Windows
    npm run setup-db
    ```
 
-### Running Locally
+## Running Locally
 
 1. Start the project:
 
