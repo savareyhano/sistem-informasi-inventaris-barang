@@ -14,7 +14,7 @@ const config = {
 };
 
 const databaseName = process.env.PGDATABASE;
-const dumpFilePath = "./db.sql";
+const dumpFilePath = "./database/db.sql";
 
 class DatabaseError extends Error {
   constructor(message) {
