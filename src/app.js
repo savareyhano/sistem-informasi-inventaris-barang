@@ -18,10 +18,11 @@ const logRoutes = require("./routes/logRoutes");
 
 const app = express();
 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
 app.use(express.urlencoded({ extended: true }));
-
 app.use(methodOverride("_method"));
-
 app.use(
   cookieSession({
     name: "session",
@@ -30,9 +31,7 @@ app.use(
   })
 );
 
-app.set("view engine", "ejs");
-
-app.set("views", path.join(__dirname, "views"));
+// Static files
 app.use("/assets", express.static(path.join(__dirname, "../public/assets")));
 app.use("/css", express.static(path.join(__dirname, "../public/css")));
 app.use("/js", express.static(path.join(__dirname, "../public/js")));
@@ -41,30 +40,30 @@ app.use("/plugins", express.static(path.join(__dirname, "../public/plugins")));
 app.use("/dist", express.static(path.join(__dirname, "../public/dist")));
 app.use("/node_modules", express.static(path.join(__dirname, "../node_modules")));
 
+// Custom logger
 const custom = (tokens, req, res) => {
-  if (req.session) {
-    if (req.session.user) {
-      const usr = req.session.user.email;
-      const method = tokens.method(req, res);
-      const endpoint = tokens.url(req, res);
-      const statusCode = tokens.status(req, res);
+  if (req.session && req.session.user) {
+    const usr = req.session.user.email;
+    const method = tokens.method(req, res);
+    const endpoint = tokens.url(req, res);
+    const statusCode = tokens.status(req, res);
 
-      log.addLog(usr, method, endpoint, statusCode);
-    }
-    return [
-      tokens.method(req, res),
-      tokens.url(req, res),
-      tokens.status(req, res),
-      tokens.res(req, res, "content-length"),
-      "-",
-      tokens["response-time"](req, res),
-      "ms",
-    ].join(" ");
+    log.addLog(usr, method, endpoint, statusCode);
   }
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, "content-length"),
+    "-",
+    tokens["response-time"](req, res),
+    "ms",
+  ].join(" ");
 };
 
 app.use(morgan(custom));
 
+// Routes
 app.use(authRoutes);
 app.use(dashboardRoutes);
 app.use(usersRoutes);
