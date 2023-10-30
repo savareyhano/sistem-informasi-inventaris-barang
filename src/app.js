@@ -32,7 +32,6 @@ app.use(
 );
 
 // Static files
-app.use("/assets", express.static(path.join(__dirname, "../public/assets")));
 app.use("/css", express.static(path.join(__dirname, "../public/css")));
 app.use("/js", express.static(path.join(__dirname, "../public/js")));
 app.use("/uploads", express.static(path.join(__dirname, "../public/uploads")));

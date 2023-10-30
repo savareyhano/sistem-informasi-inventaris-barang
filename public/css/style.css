@@ -6,7 +6,7 @@
 
 .zoomable:hover {
     transform: scale(2.5);
-    transition: 0.3s ease;
+    transition: 0.32s ease;
 }
 
 .img-detail {

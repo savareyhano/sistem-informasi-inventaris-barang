@@ -110,7 +110,7 @@
                               <div class="form-group">
                                 <label for="image">Gambar</label>
                                 <input type="file" name="image" accept="image/png, image/jpeg" class="form-control-file" />
-                                Maksimal ukuran gambar: 1MB.
+                                <small class="form-text text-muted">Maksimal ukuran gambar: 1MB</small>
                               </div>
                             </div>
                             <div class="modal-footer">
@@ -163,12 +163,24 @@
                               <img src="/uploads/<%= element.kodebarang %>.png">
                             </div>
                             <div class="form-group">
+                              <label for="qrSize">Ukuran (lebar x tinggi dalam cm)</label>
+                              <div class="input-group">
+                                <input id="qrWidth<%= element.idbarang %>" type="number" class="form-control" name="qrWidth" placeholder="Lebar (cm)" step="0.01" value="2"  min="0.01" oninput="checkSizeValue(this)" />
+                                <div class="input-group-prepend input-group-append">
+                                  <span class="input-group-text">x</span>
+                                </div>
+                                <input id="qrHeight<%= element.idbarang %>" type="number" class="form-control" name="qrHeight" placeholder="Tinggi (cm)" step="0.01" value="2" min="0.01" oninput="checkSizeValue(this)" />
+                              </div>
+                              <small class="form-text text-muted">Maksimal lebar dan tinggi: 9 cm x 9 cm</small>
+                            </div>
+                            <div class="form-group">
                               <label for="qrQty">Jumlah</label>
-                              <input id="qrQty<%= element.idbarang %>" type="number" class="form-control" name="qrQty" placeholder="Jumlah" value="1" max="999" min="1">
+                              <input id="qrQty<%= element.idbarang %>" type="number" class="form-control" name="qrQty" placeholder="Jumlah" value="1" min="1" oninput="checkQtyValue(this)" />
+                              <small class="form-text text-muted">Maksimal kode QR yang dapat di cetak: 9999</small>
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="PrintImage('/uploads/<%= element.kodebarang %>.png','<%= element.idbarang %>'); return false;">Print</button>
+                            <button type="button" class="btn btn-primary" onclick="PrintImage('/uploads/<%= element.kodebarang %>.png','<%= element.idbarang %>', '<%= element.kodebarang %> - <%= element.namabarang %>'); return false;">Print</button>
                             <button type="button" class="btn btn-secondary" onclick="$('#printqr<%= element.idbarang %>').modal('hide');">Tutup</button>
                           </div>
                         </div>
@@ -221,7 +233,7 @@
               <div class="form-group">
                 <label for="image">Gambar</label>
                 <input type="file" name="image" accept="image/png, image/jpeg" class="form-control-file" required />
-                Maksimal ukuran gambar: 1MB.
+                <small class="form-text text-muted">Maksimal ukuran gambar: 1MB</small>
               </div>
             </div>
             <div class="modal-footer">

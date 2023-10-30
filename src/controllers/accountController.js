@@ -44,7 +44,7 @@ exports.changeEmail = [
     return true;
   }),
   async (req, res) => {
-    if (req.session.user && req.session.user.email !== "superadmin@gmail.com") {
+    if (req.session.user && req.session.user.email !== "superadmin@email.com") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         res.render("account", {
@@ -150,7 +150,7 @@ exports.changeRole = [
     return true;
   }),
   async (req, res) => {
-    if (req.session.user && req.session.user.email !== "superadmin@gmail.com") {
+    if (req.session.user && req.session.user.email !== "superadmin@email.com") {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         res.render("account", {

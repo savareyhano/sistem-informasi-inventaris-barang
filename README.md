@@ -77,8 +77,8 @@ Make sure the PATH for Postgres tools is already set on your system. For Windows
 
 ## Main Features
 
-- **Built-in Bulk QR Code Generator**: Can make (technically) infinite amount of QR codes of selected items and print it.
-- **QR Code Scanner**: Scan QR using webcam device or from image via upload.
+- **Built-in Bulk QR Code Generator**: Can make up to 9999 QR codes of selected items that can be resized and print it.
+- **QR Code Scanner**: Scan QR code using webcam device or from image via upload.
 
 ## Screenshots
 
@@ -92,7 +92,7 @@ Make sure the PATH for Postgres tools is already set on your system. For Windows
 
 ### Print QR Code
 
-![Print QR](https://user-images.githubusercontent.com/32730327/273454740-4a5de934-0a78-47ca-b92d-11419febe76f.png)
+![Print QR](https://user-images.githubusercontent.com/32730327/279119716-8c39b474-e2b0-43bc-be3f-8f6acb70dab6.png)
 
 ### Scan QR Code
 
