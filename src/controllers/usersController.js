@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { body, validationResult } = require("express-validator");
-const user = require("../queries/userQuery");
+const user = require("../queries/usersQuery");
 
 exports.getUsers = async (req, res) => {
   if (req.session.user && req.session.user.role === "superadmin") {

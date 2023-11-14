@@ -7,14 +7,7 @@ const morgan = require("morgan");
 
 const log = require("./queries/logQuery");
 
-const authRoutes = require("./routes/authRoutes");
-const dashboardRoutes = require("./routes/dashboardRoutes");
-const usersRoutes = require("./routes/usersRoutes");
-const accountRoutes = require("./routes/accountRoutes");
-const barangRoutes = require("./routes/barangRoutes");
-const barangMasukRoutes = require("./routes/barangMasukRoutes");
-const barangKeluarRoutes = require("./routes/barangKeluarRoutes");
-const logRoutes = require("./routes/logRoutes");
+const routes = require('./routes/index');
 
 const app = express();
 
@@ -42,12 +35,12 @@ app.use("/node_modules", express.static(path.join(__dirname, "../node_modules"))
 // Custom logger
 const custom = (tokens, req, res) => {
   if (req.session && req.session.user) {
-    const usr = req.session.user.email;
+    const user = req.session.user.email;
     const method = tokens.method(req, res);
     const endpoint = tokens.url(req, res);
     const statusCode = tokens.status(req, res);
 
-    log.addLog(usr, method, endpoint, statusCode);
+    log.addLog(user, method, endpoint, statusCode);
   }
   return [
     tokens.method(req, res),
@@ -62,15 +55,7 @@ const custom = (tokens, req, res) => {
 
 app.use(morgan(custom));
 
-// Routes
-app.use(authRoutes);
-app.use(dashboardRoutes);
-app.use(usersRoutes);
-app.use(accountRoutes);
-app.use(barangRoutes);
-app.use(barangMasukRoutes);
-app.use(barangKeluarRoutes);
-app.use(logRoutes);
+app.use(routes);
 
 app.get("*", function (req, res) {
   res.status(404).render("404", { title: "404 Error" });

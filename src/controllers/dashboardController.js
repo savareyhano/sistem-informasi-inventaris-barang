@@ -1,4 +1,4 @@
-const user = require("../queries/userQuery");
+const user = require("../queries/usersQuery");
 const stok = require("../queries/stockBarangQuery");
 const bmasuk = require("../queries/barangMasukQuery");
 const bkeluar = require("../queries/barangKeluarQuery");

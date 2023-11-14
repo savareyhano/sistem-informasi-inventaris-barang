@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const user = require("../queries/userQuery");
+const user = require("../queries/usersQuery");
 
 exports.login = async (req, res) => {
   const email = req.body.email;

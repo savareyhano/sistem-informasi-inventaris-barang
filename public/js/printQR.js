@@ -1,17 +1,17 @@
 function checkSizeValue(input) {
-  // if (input.value > 9) {
-  //   input.value = 9;
+  // if (input.value > input.max) {
+  //   input.value = input.max;
   // } else 
-  if (input.value <= 0) {
+  if (input.value <= input.min) {
     input.value = input.min;
   }
 }
 
 function checkQtyValue(input) {
-  // if (input.value > 9999) {
-  //   input.value = 9999;
+  // if (input.value > input.max) {
+  //   input.value = input.max;
   // } else 
-  if (input.value <= 0) {
+  if (input.value <= input.min) {
     input.value = input.min;
   }
 }
