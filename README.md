@@ -4,20 +4,18 @@ An inventory management application. This is my final project for WGS Bootcamp B
 
 ## Table of Contents
 
-- [Sistem Informasi Inventaris Barang](#sistem-informasi-inventaris-barang)
-  - [Table of Contents](#table-of-contents)
-  - [First Time Setup](#first-time-setup)
-    - [Prerequisite](#prerequisite)
-    - [Installation](#installation)
-  - [Running Locally](#running-locally)
-  - [Main Features](#main-features)
-  - [Screenshots](#screenshots)
-    - [Dashboard](#dashboard)
-    - [Table](#table)
-    - [Print QR Code](#print-qr-code)
-    - [Scan QR Code](#scan-qr-code)
-    - [Dark Mode](#dark-mode)
-  - [License](#license)
+- [First Time Setup](#first-time-setup)
+  - [Prerequisite](#prerequisite)
+  - [Installation](#installation)
+- [Running Locally](#running-locally)
+- [Main Features](#main-features)
+- [Screenshots](#screenshots)
+  - [Dashboard](#dashboard)
+  - [Table](#table)
+  - [Print QR Code](#print-qr-code)
+  - [Scan QR Code](#scan-qr-code)
+  - [Dark Mode](#dark-mode)
+- [License](#license)
 
 ## First Time Setup
 
@@ -27,7 +25,7 @@ An inventory management application. This is my final project for WGS Bootcamp B
 - [Node](https://nodejs.org/en/download/current)
 - [PostgreSQL](https://www.postgresql.org/download/)
 
-Make sure the PATH for Postgres tools is already set on your system. For Windows, [read here](https://www.commandprompt.com/education/how-to-set-windows-path-for-postgres-tools/) to know how.
+Make sure your system PATH includes Postgres tools. For Windows, [see instructions here](https://www.commandprompt.com/education/how-to-set-windows-path-for-postgres-tools/).
 
 ### Installation
 
@@ -69,16 +67,21 @@ Make sure the PATH for Postgres tools is already set on your system. For Windows
    npm start
    ```
 
-2. Open [http://localhost:3000](http://localhost:3000) in your browser (only if you set the `PORT` number to 3000 in the `.env` file).
+2. Visit [http://localhost:3000](http://localhost:3000) (this may vary depending on the `HOSTNAME` and `PORT` values you set in the `.env` file).
 
 3. Login with the following credentials:
-   - **Email**: superadmin@email.com
-   - **Password**: superadmin123
+
+  | email | password | role |
+  |---|---|---|
+  | superadmin@email.com | superadmin123 | superadmin |
+  | admin@email.com | admin123 | superadmin |
+  | user@email.com | password | user |
+  | usr@email.com | password | user |
 
 ## Main Features
 
-- **Built-in Bulk QR Code Generator**: Can make (technically) unlimited QR codes of selected items that can be resized and printed.
-- **QR Code Scanner**: Scan QR code using webcam device or from image via upload.
+- **Integrated Bulk QR Code Generator**: Enables the creation of QR codes in bulk for selected items, complete with customization options for resizing and printing.
+- **Versatile QR Code Scanner**: Offers the ability to scan QR codes using webcam devices or by uploading images.
 
 ## Screenshots
 
