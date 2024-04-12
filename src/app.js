@@ -7,7 +7,14 @@ const morgan = require("morgan");
 
 const log = require("./queries/logQuery");
 
-const routes = require('./routes/index');
+const authRoutes = require('./routes/authRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const usersRoutes = require('./routes/usersRoutes');
+const accountRoutes = require('./routes/accountRoutes');
+const barangRoutes = require('./routes/barangRoutes');
+const barangMasukRoutes = require('./routes/barangMasukRoutes');
+const barangKeluarRoutes = require('./routes/barangKeluarRoutes');
+const logRoutes = require('./routes/logRoutes');
 
 const app = express();
 
@@ -55,7 +62,14 @@ const custom = (tokens, req, res) => {
 
 app.use(morgan(custom));
 
-app.use(routes);
+app.use(authRoutes);
+app.use(dashboardRoutes);
+app.use(usersRoutes);
+app.use(accountRoutes);
+app.use(barangRoutes);
+app.use(barangMasukRoutes);
+app.use(barangKeluarRoutes);
+app.use(logRoutes);
 
 app.get("*", function (req, res) {
   res.status(404).render("404", { title: "404 Error" });
