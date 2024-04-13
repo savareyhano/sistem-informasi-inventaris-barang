@@ -44,7 +44,7 @@ Make sure your system PATH includes Postgres tools. For Windows, [see instructio
 3. Create a `.env` file (further configuration needed to match your Postgres database settings):
 
    ```bash
-   cp .env-example .env
+   cp .env.example .env
    ```
 
 4. Install the dependencies:
