@@ -35,8 +35,9 @@ app.use(
 app.use('/css', express.static(path.join(__dirname, '../public/css')));
 app.use('/js', express.static(path.join(__dirname, '../public/js')));
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
-app.use('/plugins', express.static(path.join(__dirname, '../public/plugins')));
-app.use('/dist', express.static(path.join(__dirname, '../public/dist')));
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
+app.use('/plugins', express.static(path.join(__dirname, '../node_modules/admin-lte/plugins')));
+app.use('/dist', express.static(path.join(__dirname, '../node_modules/admin-lte/dist')));
 app.use('/node_modules', express.static(path.join(__dirname, '../node_modules')));
 
 // Custom logger
