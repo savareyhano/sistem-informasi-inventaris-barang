@@ -1,7 +1,7 @@
-const { createdb, dropdb } = require("pgtools");
-const { exec } = require("child_process");
-require("dotenv").config();
-const readline = require("readline").createInterface({
+const { createdb, dropdb } = require('pgtools');
+const { exec } = require('child_process');
+require('dotenv').config();
+const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
 });
@@ -14,7 +14,7 @@ const config = {
 };
 
 const databaseName = process.env.PGDATABASE;
-const dumpFilePath = "./database/db.sql";
+const dumpFilePath = './database/db.sql';
 
 class DatabaseError extends Error {
   constructor(message) {
@@ -27,7 +27,7 @@ async function createDatabase() {
   try {
     await createdb(config, databaseName);
   } catch (error) {
-    throw new DatabaseError("Error creating database: " + error);
+    throw new DatabaseError(`Error creating database: ${error}`);
   }
 }
 
@@ -38,14 +38,14 @@ async function restoreDatabase() {
     exec(
       restoreCommand,
       { env: { PGPASSWORD: config.password } },
-      (error, stdout, stderr) => {
+      (error) => {
         if (error) {
-          reject(new DatabaseError("Error restoring database: " + error));
+          reject(new DatabaseError(`Error restoring database: ${error}`));
         } else {
-          console.log("Database restored successfully");
+          console.log('Database restored successfully');
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -54,7 +54,7 @@ async function dropDatabase() {
   try {
     await dropdb(config, databaseName);
   } catch (error) {
-    throw new DatabaseError("Error dropping database: " + error);
+    throw new DatabaseError(`Error dropping database: ${error}`);
   }
 }
 
@@ -65,28 +65,28 @@ async function setupDatabase() {
     process.exit(0);
   } catch (error) {
     if (
-      error instanceof DatabaseError &&
-      error.message.includes("duplicate_database")
+      error instanceof DatabaseError
+      && error.message.includes('duplicate_database')
     ) {
       readline.question(
         `Database ${process.env.PGDATABASE} already exists. Proceed with restoration? Existing data will be replaced. (Y/N) `,
         async (answer) => {
-          if (answer.toLowerCase() === "y") {
+          if (answer.toLowerCase() === 'y') {
             try {
               await dropDatabase();
               await createDatabase();
               await restoreDatabase();
-            } catch (error) {
-              console.error("Error setting up database:", error);
+            } catch (err) {
+              console.error('Error setting up database:', err);
             }
           } else {
-            console.log("Operation cancelled.");
+            console.log('Operation cancelled.');
           }
           readline.close();
-        }
+        },
       );
     } else {
-      console.error("Error setting up database:", error);
+      console.error('Error setting up database:', error);
       process.exit(1);
     }
   }

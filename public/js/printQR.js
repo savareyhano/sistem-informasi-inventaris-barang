@@ -1,41 +1,40 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 function checkSizeValue(input) {
-  // if (input.value > input.max) {
-  //   input.value = input.max;
-  // } else 
-  if (input.value <= input.min) {
-    input.value = input.min;
+  const inputValue = input;
+  if (inputValue.value <= inputValue.min) {
+    inputValue.value = inputValue.min;
   }
 }
 
 function checkQtyValue(input) {
-  // if (input.value > input.max) {
-  //   input.value = input.max;
-  // } else 
-  if (input.value <= input.min) {
-    input.value = input.min;
+  const inputValue = input;
+  if (inputValue.value <= inputValue.min) {
+    inputValue.value = inputValue.min;
   }
 }
 
 function ImagetoPrint(source, title) {
   return (
-    "<html><head><title>" + title + "</title><script>function step1(){\n" +
-    "setTimeout('step2()', 10);}\n" +
-    "function step2(){window.print();window.close()}\n" +
-    "</script></head><body onload='step1()'>\n" +
-    source +
-    "</body></html>"
+    `<html><head><title>${title}</title><script>function step1(){\n`
+    + 'setTimeout(\'step2()\', 10);}\n'
+    + 'function step2(){window.print();window.close()}\n'
+    + `</script></head><body onload='step1()'>\n${
+      source
+    }</body></html>`
   );
 }
 
 function PrintImage(source, id, title) {
-  Pagelink = "about:blank";
-  var qty = $("#qrQty" + id).val();
-  var width = $("#qrWidth" + id).val() * 37.7952755906;
-  var height = $("#qrHeight" + id).val() * 37.7952755906;
-  var pwa = window.open(Pagelink, "_new");
-  var img = "";
-  for (var i = 1; i <= qty; i++) {
-    var img = img + "<img src='" + source + "' width='" + width + "' height='" + height + "' />";
+  const pagelink = 'about:blank';
+  const qty = $(`#qrQty${id}`).val();
+  const pixelToCentimeter = 37.7952755906;
+  const width = $(`#qrWidth${id}`).val() * pixelToCentimeter;
+  const height = $(`#qrHeight${id}`).val() * pixelToCentimeter;
+  const pwa = window.open(pagelink, '_new');
+  let img = '';
+  for (let i = 1; i <= qty; i += 1) {
+    img += `<img src='${source}' width='${width}' height='${height}' />`;
   }
   pwa.document.open();
   pwa.document.write(ImagetoPrint(img, title));

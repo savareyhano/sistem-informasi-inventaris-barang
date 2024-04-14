@@ -1,10 +1,13 @@
-const express = require("express");
-const router = express.Router();
-const barangMasukController = require("../controllers/barangMasukController");
+const express = require('express');
 
-router.get("/barangmasuk", barangMasukController.getBarangMasuk);
-router.post("/barangmasuk", barangMasukController.addBarangMasuk);
-router.put("/barangmasuk/:id", barangMasukController.updateBarangMasuk);
-router.post("/barangmasuk/delete/:id", barangMasukController.deleteBarangMasuk);
+const router = express.Router();
+const {
+  getBarangMasuk, addBarangMasuk, updateBarangMasuk, deleteBarangMasuk,
+} = require('../controllers/barangMasukController');
+
+router.get('/barangmasuk', getBarangMasuk);
+router.post('/barangmasuk', addBarangMasuk);
+router.put('/barangmasuk/:id', updateBarangMasuk);
+router.post('/barangmasuk/delete/:id', deleteBarangMasuk);
 
 module.exports = router;
