@@ -1,44 +1,49 @@
-const bcrypt = require("bcrypt");
-const user = require("../queries/usersQuery");
+const bcrypt = require('bcrypt');
+const user = require('../queries/usersQuery');
 
-exports.login = async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+const login = async (req, res) => {
+  const { email } = req.body;
+  const { password } = req.body;
 
   const checkPass = await bcrypt.compare(
     password,
-    await user.checkPassword(email)
+    await user.checkPassword(email),
   );
 
   if (
-    email === (await user.email(email)) &&
-    checkPass &&
-    (await user.checkRole(email)) === "superadmin"
+    email === (await user.email(email))
+    && checkPass
+    && (await user.checkRole(email)) === 'superadmin'
   ) {
     req.session.user = {
-      email: email,
-      role: "superadmin",
+      email,
+      role: 'superadmin',
     };
-    res.redirect("/");
+    res.redirect('/');
   } else if (
-    email === (await user.email(email)) &&
-    checkPass &&
-    (await user.checkRole(email)) === "user"
+    email === (await user.email(email))
+    && checkPass
+    && (await user.checkRole(email)) === 'user'
   ) {
     req.session.user = {
-      email: email,
-      role: "user",
+      email,
+      role: 'user',
     };
-    res.redirect("/");
+    res.redirect('/');
   } else {
-    res.render("login", {
-      title: "Login",
-      loginFail: "Email atau kata sandi salah.",
+    res.render('login', {
+      title: 'Login',
+      loginFail: 'Email atau kata sandi salah.',
     });
   }
 };
 
-exports.logout = (req, res) => {
+const logout = (req, res) => {
   req.session = null;
-  res.render("login", { title: "Login", logout: "Keluar berhasil." });
+  res.render('login', { title: 'Login', logout: 'Keluar berhasil.' });
+};
+
+module.exports = {
+  login,
+  logout,
 };
