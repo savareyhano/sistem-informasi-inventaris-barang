@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "start:dev": "nodemon src/server.js",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
     "setup-db": "node scripts/setup-db.js"
   },
   "keywords": [],
@@ -30,6 +32,9 @@
     "qrcode": "^1.5.1"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
     "nodemon": "^3.0.1"
   }
 }
