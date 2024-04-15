@@ -29,7 +29,7 @@ const addBarangMasuk = async (
   kodebarangMasuk,
 ) => {
   const query = {
-    text: 'INSERT INTO public.masuk(idbarang, keterangan, qty, namabarangMasuk, penginput, kodebarangMasuk) VALUES ($1, $2, $3, $4, $5, $6)',
+    text: 'INSERT INTO public.masuk(idbarang, keterangan, qty, namabarang_m, penginput, kodebarang_m) VALUES ($1, $2, $3, $4, $5, $6)',
     values: [idbarang, keterangan, qty, namabarangMasuk, penginput, kodebarangMasuk],
   };
 
