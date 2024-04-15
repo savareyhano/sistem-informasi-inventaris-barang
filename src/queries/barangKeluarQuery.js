@@ -1,24 +1,23 @@
 const pool = require('../config/database');
 
-// const getBarangKeluar = async () => {
-//     const {rows : brg} = await pool.query(
-//       `SELECT * FROM public.keluar k, public.stock s where s.idbarang = k.idbarang`
-//       );
-//     return brg;
-// }
-
 const getDetail = async (id) => {
-  const { rows: det } = await pool.query(
-    `SELECT * FROM public.keluar WHERE idkeluar='${id}'`,
-  );
-  return det[0];
+  const query = {
+    text: 'SELECT * FROM public.keluar WHERE idkeluar = $1',
+    values: [id],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0];
 };
 
 const getQty = async (id) => {
-  const { rows: qty } = await pool.query(
-    `SELECT * FROM public.keluar WHERE idkeluar='${id}'`,
-  );
-  return qty[0].qty;
+  const query = {
+    text: 'SELECT * FROM public.keluar WHERE idkeluar = $1',
+    values: [id],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0].qty;
 };
 
 const addBarangKeluar = async (
@@ -29,47 +28,69 @@ const addBarangKeluar = async (
   penginput,
   kodebarangKeluar,
 ) => {
-  const add = await pool.query(
-    `INSERT INTO public.keluar(idbarang, penerima, qty, namabarangKeluar, penginput, kodebarangKeluar) VALUES ('${idbarang}', '${penerima}', '${qty}', '${namabarangKeluar}', '${penginput}', '${kodebarangKeluar}')`,
-  );
-  return add;
+  const query = {
+    text: 'INSERT INTO public.keluar(idbarang, penerima, qty, namabarangKeluar, penginput, kodebarangKeluar) VALUES ($1, $2, $3, $4, $5, $6)',
+    values: [idbarang, penerima, qty, namabarangKeluar, penginput, kodebarangKeluar],
+  };
+
+  await pool.query(query);
 };
 
-const updateBarangKeluar = async (penerima, qty, idkeluar) => pool.query(
-  `UPDATE public.keluar SET penerima='${penerima}', qty='${qty}' WHERE idkeluar='${idkeluar}'`,
-);
+const updateBarangKeluar = async (penerima, qty, idkeluar) => {
+  const query = {
+    text: 'UPDATE public.keluar SET penerima= $1, qty = $2 WHERE idkeluar = $3',
+    values: [penerima, qty, idkeluar],
+  };
+
+  await pool.query(query);
+};
 
 const delBarangKeluarId = async (id) => {
-  const del = await pool.query(
-    `DELETE FROM public.keluar WHERE idbarang='${id}'`,
-  );
-  return del;
+  const query = {
+    text: 'DELETE FROM public.keluar WHERE idbarang = $1',
+    values: [id],
+  };
+
+  await pool.query(query);
 };
 
 const delBarangKeluar = async (idkeluar) => {
-  const del = await pool.query(
-    `DELETE FROM public.keluar WHERE idkeluar='${idkeluar}'`,
-  );
-  return del;
+  const query = {
+    text: 'DELETE FROM public.keluar WHERE idkeluar = $1',
+    values: [idkeluar],
+  };
+
+  await pool.query(query);
 };
 
 const getBarangK = async () => {
-  const { rows: brg } = await pool.query(
-    'SELECT * FROM public.keluar ORDER BY idkeluar DESC',
-  );
-  return brg;
+  const query = {
+    text: 'SELECT * FROM public.keluar ORDER BY idkeluar DESC',
+    values: [],
+  };
+
+  const result = await pool.query(query);
+  return result.rows;
 };
 
 const getDetailBarang = async (id) => {
-  const { rows: det } = await pool.query(
-    `SELECT * FROM public.keluar WHERE idbarang='${id}'`,
-  );
-  return det;
+  const query = {
+    text: 'SELECT * FROM public.keluar WHERE idbarang = $1',
+    values: [id],
+  };
+
+  const result = await pool.query(query);
+  return result.rows;
 };
 
 const totalQty = async () => {
-  const { rows: total } = await pool.query('SELECT SUM(qty) FROM keluar');
-  return total[0].sum;
+  const query = {
+    text: 'SELECT SUM(qty) FROM keluar',
+    values: [],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0].sum;
 };
 
 module.exports = {

@@ -1,30 +1,43 @@
 const pool = require('../config/database');
 
 const getBarang = async () => {
-  const { rows: brg } = await pool.query(
-    'SELECT * FROM public.stock ORDER BY idbarang',
-  );
-  return brg;
+  const query = {
+    text: 'SELECT * FROM public.stock ORDER BY idbarang',
+    values: [],
+  };
+
+  const result = await pool.query(query);
+  return result.rows;
 };
 
 const cekKode = async (kodebarang) => {
-  const { rows: res } = await pool.query(
-    `SELECT kodebarang FROM public.stock WHERE LOWER(kodebarang)='${kodebarang}'`,
-  );
-  if (res.length > 0) {
-    return res[0].kodebarang;
+  const query = {
+    text: 'SELECT kodebarang FROM public.stock WHERE LOWER(kodebarang) = $1',
+    values: [kodebarang],
+  };
+
+  const result = await pool.query(query);
+
+  if (!result.rowCount) {
+    return undefined;
   }
-  return undefined;
+
+  return result.rows[0].kodebarang;
 };
 
 const cekBarang = async (namabarang) => {
-  const { rows: resu } = await pool.query(
-    `SELECT namabarang FROM public.stock WHERE LOWER(namabarang)='${namabarang}'`,
-  );
-  if (resu.length > 0) {
-    return resu[0].namabarang;
+  const query = {
+    text: 'SELECT namabarang FROM public.stock WHERE LOWER(namabarang) = $1',
+    values: [namabarang],
+  };
+
+  const result = await pool.query(query);
+
+  if (!result.rowCount) {
+    return undefined;
   }
-  return undefined;
+
+  return result.rows[0].namabarang;
 };
 
 const addBarang = async (
@@ -35,31 +48,41 @@ const addBarang = async (
   penginput,
   kodebarang,
 ) => {
-  const add = await pool.query(
-    `INSERT INTO public.stock(namabarang, deskripsi, stock, image, penginput, kodebarang) VALUES ('${namabarang}', '${deskripsi}', '${stock}', '${image}', '${penginput}', '${kodebarang}')`,
-  );
-  return add;
+  const query = {
+    text: 'INSERT INTO public.stock(namabarang, deskripsi, stock, image, penginput, kodebarang) VALUES ($1, $2, $3, $4, $5, $6)',
+    values: [namabarang, deskripsi, stock, image, penginput, kodebarang],
+  };
+
+  await pool.query(query);
 };
 
 const getImage = async (id) => {
-  const { rows: img } = await pool.query(
-    `SELECT image FROM public.stock WHERE idbarang='${id}'`,
-  );
-  return img[0].image;
+  const query = {
+    text: 'SELECT image FROM public.stock WHERE idbarang = $1',
+    values: [id],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0].image;
 };
 
 const delBarang = async (id) => {
-  const del = await pool.query(
-    `DELETE FROM public.stock WHERE idbarang='${id}'`,
-  );
-  return del;
+  const query = {
+    text: 'DELETE FROM public.stock WHERE idbarang = $1',
+    values: [id],
+  };
+
+  await pool.query(query);
 };
 
 const getDetail = async (id) => {
-  const { rows: det } = await pool.query(
-    `SELECT * FROM public.stock WHERE idbarang='${id}'`,
-  );
-  return det[0];
+  const query = {
+    text: 'SELECT * FROM public.stock WHERE idbarang = $1',
+    values: [id],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0];
 };
 
 const updateBarang = async (
@@ -69,55 +92,87 @@ const updateBarang = async (
   image,
   kodebarang,
   idbarang,
-) => pool.query(
-  `UPDATE public.stock SET namabarang='${namabarang}', deskripsi='${deskripsi}', stock='${stock}', image='${image}', kodebarang='${kodebarang}' WHERE idbarang='${idbarang}'`,
-);
+) => {
+  const query = {
+    text: 'UPDATE public.stock SET namabarang = $1, deskripsi = $2, stock = $3, image = $4, kodebarang = $5 WHERE idbarang = $6',
+    values: [namabarang, deskripsi, stock, image, kodebarang, idbarang],
+  };
 
-const getStock = async (id) => {
-  const { rows: stock } = await pool.query(
-    `SELECT * FROM public.stock WHERE idbarang='${id}'`,
-  );
-  if (stock.length > 0) {
-    return stock[0].stock;
-  }
-  return 'undefined';
+  await pool.query(query);
 };
 
-const updateStock = async (newStock, idbarang) => pool.query(
-  `UPDATE public.stock SET stock='${newStock}' WHERE idbarang='${idbarang}'`,
-);
+const getStock = async (id) => {
+  const query = {
+    text: 'SELECT * FROM public.stock WHERE idbarang = $1',
+    values: [id],
+  };
+
+  const result = await pool.query(query);
+
+  if (!result.rowCount) {
+    return 'undefined';
+  }
+
+  return result.rows[0].stock;
+};
+
+const updateStock = async (newStock, idbarang) => {
+  const query = {
+    text: 'UPDATE public.stock SET stock = $1 WHERE idbarang = $2',
+    values: [newStock, idbarang],
+  };
+
+  await pool.query(query);
+};
 
 const checkKodeDuplicate = async (kodebarang) => {
-  const { rows: du } = await pool.query(
-    `SELECT * FROM public.stock WHERE LOWER(kodebarang)='${kodebarang}'`,
-  );
-  return du[0];
+  const query = {
+    text: 'SELECT * FROM public.stock WHERE LOWER(kodebarang) = $1',
+    values: [kodebarang],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0];
 };
 
 const checkDuplicate = async (namabarang) => {
-  const { rows: dup } = await pool.query(
-    `SELECT * FROM public.stock WHERE LOWER(namabarang)='${namabarang}'`,
-  );
-  return dup[0];
+  const query = {
+    text: 'SELECT * FROM public.stock WHERE LOWER(namabarang) = $1',
+    values: [namabarang],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0];
 };
 
 const getKode = async (id) => {
-  const { rows: kode } = await pool.query(
-    `SELECT kodebarang FROM public.stock WHERE idbarang='${id}'`,
-  );
-  return kode[0].kodebarang;
+  const query = {
+    text: 'SELECT kodebarang FROM public.stock WHERE idbarang = $1',
+    values: [id],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0].kodebarang;
 };
 
 const getNama = async (id) => {
-  const { rows: nama } = await pool.query(
-    `SELECT namabarang FROM public.stock WHERE idbarang='${id}'`,
-  );
-  return nama[0].namabarang;
+  const query = {
+    text: 'SELECT namabarang FROM public.stock WHERE idbarang = $1',
+    values: [id],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0].namabarang;
 };
 
 const totalStock = async () => {
-  const { rows: total } = await pool.query('SELECT SUM(stock) FROM stock');
-  return total[0].sum;
+  const query = {
+    text: 'SELECT SUM(stock) FROM stock',
+    values: [],
+  };
+
+  const result = await pool.query(query);
+  return result.rows[0].sum;
 };
 
 module.exports = {

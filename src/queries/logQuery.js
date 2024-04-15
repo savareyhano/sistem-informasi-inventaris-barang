@@ -1,23 +1,23 @@
 const pool = require('../config/database');
 
 const getLog = async () => {
-  const { rows: log } = await pool.query(
-    'SELECT * FROM public.log ORDER BY idlog DESC',
-  );
-  return log;
+  const query = {
+    text: 'SELECT * FROM public.log ORDER BY idlog DESC',
+    values: [],
+  };
+
+  const result = await pool.query(query);
+  return result.rows;
 };
 
-const addLog = (usr, method, endpoint, statusCode) => {
-  const add = pool.query(
-    `INSERT INTO public.log(usr, method, endpoint, status_code) VALUES ('${usr}', '${method}', '${endpoint}', '${statusCode}')`,
-  );
-  return add;
-};
+const addLog = async (usr, method, endpoint, statusCode) => {
+  const query = {
+    text: 'INSERT INTO public.log(usr, method, endpoint, status_code) VALUES ($1, $2, $3, $4)',
+    values: [usr, method, endpoint, statusCode],
+  };
 
-// const delLog = async () => {
-//   const del = await pool.query(`DELETE FROM public.log`);
-//   return del;
-// };
+  await pool.query(query);
+};
 
 module.exports = {
   getLog,
