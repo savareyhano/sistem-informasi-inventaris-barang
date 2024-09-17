@@ -1,0 +1,44 @@
+services:
+  siib:
+    build: .
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      HOSTNAME: localhost
+      PORT: 3000
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: siib
+      PGHOST: postgres
+      PGPORT: 5432
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: siib
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./database/db.sql:/tmp/db.sql
+      - ./docker-entrypoint.sh:/docker-entrypoint.sh
+    command: ['/docker-entrypoint.sh']
+    ports:
+      - '5432:5432'
+
+  pgadmin4:
+    image: elestio/pgadmin:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin@email.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin123
+      PGADMIN_LISTEN_PORT: 8080
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
