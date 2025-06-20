@@ -16,7 +16,7 @@
   "dependencies": {
     "admin-lte": "3.2",
     "bcrypt": "^5.1.0",
-    "canvas": "^2.11.0",
+    "canvas": "^3.1.1",
     "cookie-session": "^2.0.0",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
