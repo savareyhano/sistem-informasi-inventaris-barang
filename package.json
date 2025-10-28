@@ -14,7 +14,7 @@
   "author": "Sava Reyhano",
   "license": "ISC",
   "dependencies": {
-    "admin-lte": "3.2",
+    "admin-lte": "4.0.0-rc3",
     "bcrypt": "^5.1.0",
     "canvas": "^2.11.0",
     "cookie-session": "^2.0.0",
